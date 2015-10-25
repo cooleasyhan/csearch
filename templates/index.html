@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <title>Search</title>
+
+    <style type="text/css">
+    div{
+      width: 500px;
+      margin-top:18px;
+    }
+    form{
+      width: 500px;
+      padding: 20px;
+      border-bottom: 2px solid #ddd;
+    }
+    div label{
+      width:150px;
+      font-size: 14px;
+      padding: 4px;
+      text-align: right;
+      display: inline-block;
+      font-weight: bold;
+    }
+    div input,/*div textarea,*/ div select{
+      width:230px;
+      height: 30px;
+    }
+    div input[type="submit"]{
+      width:80px;
+      cursor: pointer;
+    }
+    </style>
+  </head>
+  <body>
+    <form action="http://{{ request.host }}/add" method="post">
+      <div>
+        <label>type:</label> 
+        <select name='type'>
+          <option value ="python">python</option>
+          <option value ="php">php</option>
+          <option value="conf">conf</option>
+        </select>
+      </div> 
+      <div>
+        <label>tag:</label>
+        <input type="text" name="tags" />
+      </div>
+      <div>
+        <label>code:</label>
+        <textarea name="code" rows="25" cols="120"></textarea>
+      </div>
+      <div>
+        <label></label>
+        <input type="submit" value="Submit" />
+      </div>
+    </form>
+    <form action="http://{{ request.host }}/index" method="get">
+      <div>
+        <label>Search regexp:</label>
+        <input type="text" name="regexp" />
+      </div>
+
+      <div>
+        <label>file regexp:</label>
+        <input type="text" name="file_regexp" />
+      </div>
+      <div>
+        <label></label>
+        <input type="submit" value="Submit" />
+      </div>
+
+    </form>
+    Result: 
+    <table border="1">
+  <tr>
+    <th>File Name</th>
+    <th>Line Number</th>
+    <th>Text</th>
+  </tr>
+
+  {% for rst in rst_list %}
+  {% block rst %}
+  <tr>
+    
+    <td><a href="http://{{ request.host }}/file?filename={{ escape(rst.file_full_name) }}">{{ escape(rst.file_full_name) }}</a></td>
+    <td>{{ escape(rst.row_num) }}</td>
+    <td><pre><code>{{ escape(rst.file_buff) }}</code></pre></td>
+    
+  </tr>
+  {% end %}
+  {% end %}
+
+</table>
+  </body>
+</html>
