@@ -36,6 +36,7 @@ class AddHandler(tornado.web.RequestHandler):
 		_code = self.get_argument('code');
 		if not _code.strip():
 			self.render("index.html",  rst_list=[])
+			return
 		tag_file_full_name, full_file_name = self.get_file_name(_type)
 		print _type, _tags, _code, tag_file_full_name, full_file_name
 
