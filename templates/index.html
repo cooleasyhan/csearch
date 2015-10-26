@@ -33,7 +33,7 @@
   <body>
     <form action="http://{{ request.host }}/add" method="post">
       <div>
-        <label>type:</label> 
+        <label>type:</label>
         <select name='type'>
           <option value ="python">python</option>
           <option value ="php">php</option>
@@ -41,10 +41,14 @@
           <option value="shell">shell</option>
           <option value="sql">sql</option>
         </select>
-      </div> 
+      </div>
       <div>
         <label>tag:</label>
         <input type="text" name="tags" />
+      </div>
+      <div>
+        <label>filename:</label>
+        <input type="text" name="filename" />
       </div>
       <div>
         <label>code:</label>
@@ -71,7 +75,7 @@
       </div>
 
     </form>
-    Result: 
+    Result:
     <table border="1">
   <tr>
     <th>File Name</th>
@@ -82,11 +86,11 @@
   {% for rst in rst_list %}
   {% block rst %}
   <tr>
-    
+
     <td><a href="http://{{ request.host }}/file?filename={{ escape(rst.file_full_name) }}">{{ escape(rst.file_full_name) }}</a></td>
     <td>{{ escape(rst.row_num) }}</td>
     <td><pre><code>{{ escape(rst.file_buff) }}</code></pre></td>
-    
+
   </tr>
   {% end %}
   {% end %}
