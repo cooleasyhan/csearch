@@ -20,9 +20,6 @@ class IndexHandler(tornado.web.RequestHandler):
             filename = rst.file_full_name
             row_num = rst.row_num
 
-            get_file_buf
-
-
     def get(self):
         regexp = self.get_argument('regexp', default='')
         file_regexp = self.get_argument('file_regexp', default='')
@@ -30,8 +27,7 @@ class IndexHandler(tornado.web.RequestHandler):
             cs = CSearch()
 
             cs.search_file(regexp, file_regexp)
-            
-            
+
             self.render("index.html",  rst_list=cs.rst_list)
 
         else:
@@ -43,11 +39,11 @@ class AddHandler(tornado.web.RequestHandler):
     def get_file_name(self, code_type, filename):
         if not filename:
             filename = str(time.time())
-        _dir=self.settings["csearch_path"]
-        tag_file_name=self.settings["csearch_tag_file"]
-        tag_file_full_name=_dir + '/' + tag_file_name
+        _dir = self.settings["csearch_path"]
+        tag_file_name = self.settings["csearch_tag_file"]
+        tag_file_full_name = _dir + '/' + tag_file_name
 
-        full_file_name=_dir + '/' + code_type + '/' + filename
+        full_file_name = _dir + '/' + code_type + '/' + filename
 
         return tag_file_full_name, full_file_name
 
@@ -61,7 +57,8 @@ class AddHandler(tornado.web.RequestHandler):
             return
         tag_file_full_name, full_file_name = self.get_file_name(
             _type, _filename)
-        print _type, _tags, _code, _filename, tag_file_full_name, full_file_name
+        print _type, _tags, _code, _filename,
+        tag_file_full_name, full_file_name
 
         with open(full_file_name, 'aw') as file:
             file.write('%s\n' % _code)
