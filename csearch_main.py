@@ -15,14 +15,25 @@ class MainHandler(tornado.web.RequestHandler):
 
 class IndexHandler(tornado.web.RequestHandler):
 
+    def beautiful_rst(self, rst_list):
+        for rst in rst_list:
+            filename = rst.file_full_name
+            row_num = rst.row_num
+
+            get_file_buf
+
+
     def get(self):
         regexp = self.get_argument('regexp', default='')
         file_regexp = self.get_argument('file_regexp', default='')
         if regexp:
             cs = CSearch()
 
-            cs.search(regexp, file_regexp)
+            cs.search_file(regexp, file_regexp)
+            
+            
             self.render("index.html",  rst_list=cs.rst_list)
+
         else:
             self.render("index.html",  rst_list=[])
 
