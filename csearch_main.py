@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from csearch import CSearch, SearchResult
+from csearch import CSearch
 import tornado.ioloop
 import tornado.web
 import os
@@ -21,8 +21,10 @@ class IndexHandler(tornado.web.RequestHandler):
         if regexp:
             cs = CSearch()
 
-            cs.search(regexp, file_regexp)
+            cs.search_file(regexp, file_regexp)
+
             self.render("index.html",  rst_list=cs.rst_list)
+
         else:
             self.render("index.html",  rst_list=[])
 
@@ -32,11 +34,11 @@ class AddHandler(tornado.web.RequestHandler):
     def get_file_name(self, code_type, filename):
         if not filename:
             filename = str(time.time())
-        _dir=self.settings["csearch_path"]
-        tag_file_name=self.settings["csearch_tag_file"]
-        tag_file_full_name=_dir + '/' + tag_file_name
+        _dir = self.settings["csearch_path"]
+        tag_file_name = self.settings["csearch_tag_file"]
+        tag_file_full_name = _dir + '/' + tag_file_name
 
-        full_file_name=_dir + '/' + code_type + '/' + filename
+        full_file_name = _dir + '/' + code_type + '/' + filename
 
         return tag_file_full_name, full_file_name
 
@@ -50,13 +52,15 @@ class AddHandler(tornado.web.RequestHandler):
             return
         tag_file_full_name, full_file_name = self.get_file_name(
             _type, _filename)
-        print _type, _tags, _code, _filename, tag_file_full_name, full_file_name
+        print _type, _tags, _code, _filename,
+        tag_file_full_name, full_file_name
 
         with open(full_file_name, 'aw') as file:
-            file.write('%s\n' % _code)
+            file.write('%s\n' % _code.encode('utf8'))
             file.flush()
         with open(tag_file_full_name, 'a') as file:
-            file.writelines('%s-%s-%s\n' % (_type, _tags, full_file_name))
+            buff = '%s-%s-%s\n' % (_type, _tags, full_file_name)
+            file.writelines(buff.encode('utf8'))
             file.flush()
 
         cs = CSearch()

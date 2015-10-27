@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import subprocess
+import os
 
 
 class SearchResult(object):
@@ -10,9 +11,11 @@ class SearchResult(object):
         self.file_full_name = file_full_name
         self.file_buff = file_buff
         self.row_num = row_num
+        self.file_name = os.path.basename(self.file_full_name)
 
     def to_string(self):
-        return ' : '.join([self.seq, self.file_full_name, self.row_num, self.file_buff])
+        return ' : '.join([self.seq, self.file_full_name,
+                           self.row_num, self.file_buff, self.file_name])
 
 
 class CSearch(object):
@@ -35,7 +38,15 @@ class CSearch(object):
             file_args = '-f ' + file_regexp
 
         self.run_command(
-            'csearch -n', file_args, regexp, call_back=self.handler_rst)
+            'csearch -i -n', file_args, regexp, call_back=self.handler_rst)
+
+    def search_file(self, regexp, file_regexp=None, size=15):
+        file_args = ' '
+        if file_regexp:
+            file_args = '-f ' + file_regexp
+
+        self.run_command(
+            'csearch -i -l', file_args, regexp, call_back=self.handler_rst)
 
     def show(self):
         for rst in self.rst_list:
@@ -54,7 +65,7 @@ class CSearch(object):
                 break
             if buff:
                 b = buff.split(':')
-                sr = SearchResult(i, b[0], b[1], ':'.join(b[2:]))
+                sr = SearchResult(i, b[0], ''.join(b[1:2]), ':'.join(b[2:]))
                 self.rst_list.append(sr)
         while True:
             buff = ef.readline()
@@ -63,7 +74,8 @@ class CSearch(object):
             if buff:
                 i += 1
                 b = buff.split(':')
-                sr = SearchResult(i, b[0], b[1], ':'.join(b[2:]))
+
+                sr = SearchResult(i, b[0], ''.join(b[1:2]), ':'.join(b[2:]))
                 self.rst_list.append(sr)
 
         self.show()
@@ -73,7 +85,7 @@ class CSearch(object):
         print rf.read(),  ef.read()
 
     def add_file(self):
-        self.run_command('vim ', '/u01/data/file');
+        self.run_command('vim ', '/u01/data/file')
 
     def run_command(self, cmd, *args, **kw):
         if not cmd:
@@ -91,3 +103,10 @@ class CSearch(object):
         else:
             self.default_handler_rst(p)
 
+
+def main():
+    cs = CSearch()
+    cs.search_file('n')
+
+if __name__ == '__main__':
+    main()

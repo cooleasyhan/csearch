@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Search</title>
-
+    <meta charset="UTF-8">
     <style type="text/css">
     div{
       width: 500px;
@@ -33,7 +33,7 @@
   <body>
     <form action="http://{{ request.host }}/add" method="post">
       <div>
-        <label>type:</label>
+        <label>Type:</label>
         <select name='type'>
           <option value ="python">python</option>
           <option value ="php">php</option>
@@ -87,7 +87,7 @@
   {% block rst %}
   <tr>
 
-    <td><a href="http://{{ request.host }}/file?filename={{ escape(rst.file_full_name) }}">{{ escape(rst.file_full_name) }}</a></td>
+    <td><a href="http://{{ request.host }}/file?filename={{ escape(rst.file_full_name) }}">{{ escape(rst.file_name) }}</a></td>
     <td>{{ escape(rst.row_num) }}</td>
     <td><pre><code>{{ escape(rst.file_buff) }}</code></pre></td>
 
