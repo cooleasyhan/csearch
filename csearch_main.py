@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from csearch import CSearch, SearchResult
+from csearch import CSearch
 import tornado.ioloop
 import tornado.web
 import os
@@ -14,11 +14,6 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 class IndexHandler(tornado.web.RequestHandler):
-
-    def beautiful_rst(self, rst_list):
-        for rst in rst_list:
-            filename = rst.file_full_name
-            row_num = rst.row_num
 
     def get(self):
         regexp = self.get_argument('regexp', default='')
@@ -61,10 +56,11 @@ class AddHandler(tornado.web.RequestHandler):
         tag_file_full_name, full_file_name
 
         with open(full_file_name, 'aw') as file:
-            file.write('%s\n' % _code)
+            file.write('%s\n' % _code.encode('utf8'))
             file.flush()
         with open(tag_file_full_name, 'a') as file:
-            file.writelines('%s-%s-%s\n' % (_type, _tags, full_file_name))
+            buff = '%s-%s-%s\n' % (_type, _tags, full_file_name)
+            file.writelines(buff.encode('utf8'))
             file.flush()
 
         cs = CSearch()

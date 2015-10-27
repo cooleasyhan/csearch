@@ -14,7 +14,8 @@ class SearchResult(object):
         self.file_name = os.path.basename(self.file_full_name)
 
     def to_string(self):
-        return ' : '.join([self.seq, self.file_full_name, self.row_num, self.file_buff, self.file_name])
+        return ' : '.join([self.seq, self.file_full_name,
+                           self.row_num, self.file_buff, self.file_name])
 
 
 class CSearch(object):
@@ -84,7 +85,7 @@ class CSearch(object):
         print rf.read(),  ef.read()
 
     def add_file(self):
-        self.run_command('vim ', '/u01/data/file');
+        self.run_command('vim ', '/u01/data/file')
 
     def run_command(self, cmd, *args, **kw):
         if not cmd:
